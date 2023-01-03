@@ -5,6 +5,7 @@ import { IState } from "./interfaces";
 const initialState: IState = {
   apiKey: "ab3411e4ac868c2646c0ed488dfd919ef612b04c264f3374c97fff98ed253dc9",
   fotos: [],
+  choosenFoto: null,
 };
 
 export const getFotos = createAsyncThunk("fotos", async () => {
@@ -21,7 +22,11 @@ export const getFotos = createAsyncThunk("fotos", async () => {
 export const calendarSlice = createSlice({
   name: "fotos",
   initialState,
-  reducers: {},
+  reducers: {
+    setFotoToOpen: (state, action) => {
+      state.choosenFoto = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(
       getFotos.fulfilled,
@@ -32,7 +37,7 @@ export const calendarSlice = createSlice({
   },
 });
 
-export const { } = calendarSlice.actions;
+export const { setFotoToOpen } = calendarSlice.actions;
 
 export const state = (state: RootState) => state.fotos;
 

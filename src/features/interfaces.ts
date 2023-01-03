@@ -267,4 +267,5 @@ export interface IPhoto {
 export interface IState {
   apiKey: string;
   fotos: IPhoto[];
+  choosenFoto: IPhoto | null;
 }

@@ -1,22 +1,20 @@
 import { FC, useEffect } from "react";
-import { StyleSheet, ScrollView, View, Button } from "react-native";
+import { StyleSheet, ScrollView, View, TouchableHighlight } from "react-native";
 import { useAppSelector, useAppDispatch } from "../app/hooks";
-import { state, getFotos } from "../features/fotosSlice";
+import { state, getFotos, setFotoToOpen } from "../features/fotosSlice";
 import { FotoInfo } from "./FotoInfo";
+import { IPhoto } from "../features/interfaces";
 
-import { createAppContainer } from "react-navigation"
+type FotosProps = {
+  navigation: any;
+};
 
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
-const Stack = createNativeStackNavigator();
-
-export const Fotos: FC = () => {
+export const Fotos: FC<FotosProps> = ({ navigation }) => {
   const { fotos } = useAppSelector(state);
   const dispatch = useAppDispatch();
 
-  const onPressLearnMore = () => {
-    // dispatch(addTime(1));
+  const onPressOpen = (foto: IPhoto) => {
+    dispatch(setFotoToOpen(foto));
   };
 
   const getFotosHandler = async () => {
@@ -29,18 +27,20 @@ export const Fotos: FC = () => {
 
   return (
     <View style={styles.container}>
-    <ScrollView style={styles.scrollContainer}>
-      {fotos.length > 0 &&
-        fotos.map((foto) => {
-          return (
-          <>
-            <FotoInfo foto={foto} key={foto.id} />)
-            {/* <Button title="Go to About" onPress={() => navigation.navigate("About")} /> */}
-          </>
-          )
-        })}
-    </ScrollView>
-  </View>
+      <ScrollView style={styles.scrollContainer}>
+        {fotos.length > 0 &&
+          fotos.map((foto) => {
+            return (
+              <FotoInfo
+                foto={foto}
+                key={foto.id}
+                navigation={navigation}
+                onPressOpen={onPressOpen}
+              />
+            );
+          })}
+      </ScrollView>
+    </View>
   );
 };
 
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     paddingTop: 50,
     paddingRight: 25,
-    paddingBottom: 50,
+    paddingBottom: 150,
     paddingLeft: 25,
   },
   container: {
